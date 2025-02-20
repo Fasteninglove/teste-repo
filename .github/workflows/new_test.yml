@@ -1,0 +1,26 @@
+name: Sync Private to Public Repo
+
+on:
+  push:
+    branches:
+      - main  # Altere se necessário
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório privado
+        uses: actions/checkout@v4
+
+      - name: Sincronizar com o repositório público
+        uses: cpina/github-action-push-to-another-repository@main
+        with:
+          source-directory: '.'  # Diretório que você deseja copiar
+          destination-github-username: 'Fasteninglove'
+          destination-repository-name: 'teste-repo'
+          destination-repository-username: 'Fasteninglove'
+          user-email: 'fasteninglove@gmail.com'
+          user-name: 'Fasteninglove'
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.DEST_REPO_PAT }}
