@@ -27,8 +27,8 @@ jobs:
 
       - name: Push para repositório público (autenticado como a conta pública)
         run: |
-          git push --mirror https://${{ secrets.DEST_REPO_PAT }}@github.com/Fasteninglove/teste-repo.git
-
+          git remote set-url origin https://${{ secrets.DEST_REPO_PAT }}@github.com/Fasteninglove/teste-repo.git
+          git push --mirror origin
     env:
       ACCOUNT_TOKEN: ${{ secrets.ACCOUNT_TOKEN }}
       DEST_REPO_PAT: ${{ secrets.DEST_REPO_PAT }}
