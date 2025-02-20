@@ -3,7 +3,7 @@ name: Sync Private to Public Repo
 on:
   push:
     branches:
-      - main  # Altere se necessário
+      - main
 
 jobs:
   sync:
@@ -12,15 +12,20 @@ jobs:
     steps:
       - name: Checkout do repositório privado
         uses: actions/checkout@v4
-
-      - name: Sincronizar com o repositório público
-        uses: cpina/github-action-push-to-another-repository@main
         with:
-          source-directory: '.'  # Diretório que você deseja copiar
-          destination-github-username: 'Fasteninglove'
-          destination-repository-name: 'teste-repo'
-          destination-repository-username: 'Fasteninglove'
-          user-email: 'fasteninglove@gmail.com'
-          user-name: 'Fasteninglove'
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.DEST_REPO_PAT }}
+          token: ${{ secrets.DEST_REPO_PAT }}
+
+      - name: Configurar Git (como Fasteninglove)
+        run: |
+          git config --global user.name "Fasteninglove"
+          git config --global user.email "fasteninglove@users.noreply.github.com"
+
+      - name: Clonar repositório privado
+        run: |
+          git clone --bare https://${{ secrets.DEST_REPO_PAT }}@github.com/ViniciusSilveiraCampos/github-actions-test.git repo
+          cd repo
+
+      - name: Push para repositório público (como Fasteninglove)
+        run: |
+          git remote set-url origin https://${{ secrets.DEST_REPO_PAT }}@github.com/Fasteninglove/teste-repo.git
+          git push --mirror origin
