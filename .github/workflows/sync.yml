@@ -1,0 +1,28 @@
+name: Sync Private to Public Repo
+
+on:
+  push:
+    branches:
+      - main  # Altere se necessário
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório privado
+        uses: actions/checkout@v4
+
+      - name: Configurar Git
+        run: |
+          git config --global user.name "Borboleta Vermelha"
+          git config --global user.email "fasteninglove@gmail.com"
+
+      - name: Clonar repositório de destino
+        run: |
+          git clone --bare https://github.com/ViniciusSilveiraCampos/github-actions-test.git repo
+          cd repo
+          git push --mirror https://github.com/Fasteninglove/teste-repo.git
+          
+    env:
+      DEST_REPO_PAT: ${{ secrets.DEST_REPO_PAT }}
