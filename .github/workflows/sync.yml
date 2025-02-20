@@ -12,18 +12,24 @@ jobs:
     steps:
       - name: Checkout do repositório privado
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.ACCOUNT_TOKEN }}
 
-      - name: Configurar Git
+      - name: Configurar Git (como Fasteninglove)
         run: |
-          git config --global user.name "Borboleta Vermelha"
-          git config --global user.email "fasteninglove@gmail.com"
+          git config --global user.name "Fasteninglove"
+          git config --global user.email "fasteninglove@users.noreply.github.com"
 
-      - name: Clonar repositório de destino
+      - name: Clonar repositório privado
         run: |
           git clone --bare https://${{ secrets.ACCOUNT_TOKEN }}@github.com/ViniciusSilveiraCampos/github-actions-test.git repo
           cd repo
-          git push --mirror https://${{ secrets.DEST_REPO_PAT }}@github.com/Fasteninglove/teste-repo.git
-          
+
+      - name: Push para repositório público (como Fasteninglove)
+        run: |
+          git remote set-url origin https://${{ secrets.DEST_REPO_PAT }}@github.com/Fasteninglove/teste-repo.git
+          git push --mirror origin
+
     env:
-      GITHUB_TOKEN: ${{ secrets.ACCOUNT_TOKEN }}
+      ACCOUNT_TOKEN: ${{ secrets.ACCOUNT_TOKEN }}
       DEST_REPO_PAT: ${{ secrets.DEST_REPO_PAT }}
