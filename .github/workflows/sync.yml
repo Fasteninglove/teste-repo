@@ -20,9 +20,10 @@ jobs:
 
       - name: Clonar repositório de destino
         run: |
-          git clone --bare https://github.com/ViniciusSilveiraCampos/github-actions-test.git repo
+          git clone --bare https://${{ secrets.ACCOUNT_TOKEN }}@github.com/ViniciusSilveiraCampos/github-actions-test.git repo
           cd repo
-          git push --mirror https://github.com/Fasteninglove/teste-repo.git
+          git push --mirror https://${{ secrets.DEST_REPO_PAT }}@github.comFasteninglove/teste-repo.git
           
     env:
+      GITHUB_TOKEN: ${{ secrets.ACCOUNT_TOKEN }}
       DEST_REPO_PAT: ${{ secrets.DEST_REPO_PAT }}
